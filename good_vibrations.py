@@ -138,16 +138,8 @@ p1.motors=motor_ls1
 p2.motors=motor_ls2
 print("Start")
 time.sleep(3)
-p2.spatial(index_ls=[0,1,2])
-time.sleep(5)
-print("Next")
-p2.temporal(index_ls=[0,4,8])
-time.sleep(5)
-print("Next")
-p2.spatial(index_ls=[6,7,8])
-time.sleep(5)
-print("Next")
-p2.temporal(index_ls=[2,4,6])
+p1.temporal(index_ls=[0,1,2,3,4,5,6,7,8], duration=1)
+#p1.spatial(index_ls=[8])
 
 ###execute patterns for each phoneme (no pad distinction yet)
 #for word in words:

@@ -112,7 +112,7 @@ def speech2phonemes(text):
     print (phonemes)
     commands = [] #one command representing one phoneme
     words = []
-    stimuli= {',':0, '<PAD>':0, '<EOS>':0,' ':0, 'AA0':[0,1,[3,0]], 'AA1':[0,1,[3,0]], 'AA2':[0,1,[3,0]],'AE0':[0,0,[0,3]], 'AE1':[0,0,[0,3]], 'AE2':[0,0,[0,3]],
+    stimuli= {',':0,'.':0, '<PAD>':0, '<EOS>':0,' ':0, 'AA0':[0,1,[3,0]], 'AA1':[0,1,[3,0]], 'AA2':[0,1,[3,0]],'AE0':[0,0,[0,3]], 'AE1':[0,0,[0,3]], 'AE2':[0,0,[0,3]],
         'AH0':[0,0,[2,6]], 'AH1':[0,0,[2,6]], 'AH2':[0,0,[2,6]],'AO0':[0,0,[1,2]], 'AO1':[0,0,[1,2]], 'AO2':[0,0,[1,2]],'AW0':[0,1,[2,4,6]], 'AW1':[0,1,[2,4,6]], 'AW2':[0,1,[2,4,6]], 'AY0':[0,1,[0,4,8]],
         'AY1':[0,1,[0,4,8]], 'AY2':[0,1,[0,4,8]], 'B':[1,1,[0,4,8]],'CH':[1,0,[2,5,8]],'D':[1,0,[0,2,6,8]],'DH':[1,1,[1,2,5,8,7]],'EH0':[0,1,[8,7]], 'EH1':[0,1,[8,7]], 'EH2':[0,1,[8,7]],'ER0':[0,1,[6,4,2]], 'ER1':[0,1,[6,4,2]],
         'ER2':[0,1,[6,4,2]],'EY0':[0,1,[0,3]], 'EY1':[0,1,[0,3]], 'EY2':[0,1,[0,3]],'F':[1,0,[8]],'G':[1,0,[6]],'HH':[1,0,[2]],'IH0':[0,0,[0,8]], 'IH1':[0,0,[0,8]], 'IH2':[0,0,[0,8]],'IY0':[0,1,[7,8]], 
@@ -156,13 +156,13 @@ while(True):
 		words = speech2phonemes(d)
 		for word in words:
 			for phoneme in word:
-				if phoneme[0] == 0:
+				if phoneme[0] < 2:
 					p1.vibrate(pattern=phoneme)
-				elif phoneme[0] == 1:
+				elif phoneme[0] == 2:
 					p2.vibrate(pattern=phoneme)
 				else:
 					print("Error while selecting pad")
-				time.sleep(1)
+			time.sleep(2)
 		print("Vibration finished")
 	else:
 		print("Sleeping")

@@ -109,7 +109,7 @@ def speech2phonemes(text):
     print (phonemes)
     commands = [] #one command representing one phoneme
     words = []
-    stimuli= {',':0, '<PAD>':0, '<EOS>':0,' ':0, 'AA0':[0,1,[3,0]], 'AA1':[0,1,[3,0]], 'AA2':[0,1,[3,0]],'AE0':[0,0,[0,3]], 'AE1':[0,0,[0,3]], 'AE2':[0,0,[0,3]],
+    stimuli= {',':0,'.':0, '<PAD>':0, '<EOS>':0,' ':0, 'AA0':[0,1,[3,0]], 'AA1':[0,1,[3,0]], 'AA2':[0,1,[3,0]],'AE0':[0,0,[0,3]], 'AE1':[0,0,[0,3]], 'AE2':[0,0,[0,3]],
         'AH0':[0,0,[2,6]], 'AH1':[0,0,[2,6]], 'AH2':[0,0,[2,6]],'AO0':[0,0,[1,2]], 'AO1':[0,0,[1,2]], 'AO2':[0,0,[1,2]],'AW0':[0,1,[2,4,6]], 'AW1':[0,1,[2,4,6]], 'AW2':[0,1,[2,4,6]], 'AY0':[0,1,[0,4,8]],
         'AY1':[0,1,[0,4,8]], 'AY2':[0,1,[0,4,8]], 'B':[1,1,[0,4,8]],'CH':[1,0,[2,5,8]],'D':[1,0,[0,2,6,8]],'DH':[1,1,[1,2,5,8,7]],'EH0':[0,1,[8,7]], 'EH1':[0,1,[8,7]], 'EH2':[0,1,[8,7]],'ER0':[0,1,[6,4,2]], 'ER1':[0,1,[6,4,2]],
         'ER2':[0,1,[6,4,2]],'EY0':[0,1,[0,3]], 'EY1':[0,1,[0,3]], 'EY2':[0,1,[0,3]],'F':[1,0,[8]],'G':[1,0,[6]],'HH':[1,0,[2]],'IH0':[0,0,[0,8]], 'IH1':[0,0,[0,8]], 'IH2':[0,0,[0,8]],'IY0':[0,1,[7,8]], 
@@ -143,28 +143,33 @@ p2.motors=motor_ls2
 
 while(True):
     with sr.Microphone(device_index=2) as source:
-        r.adjust_for_ambient_noise(source) #adapt to noise
+        r.adjust_for_ambient_noise(source, duration=0.25) #adapt to noise
+        p1.temporal(index_ls=[0,1,2,5,8,7,6,3])
         print("Say something!")
-        audio = r.listen(source, timeout = 5)
+        audio = r.listen(source, phrase_time_limit = 3)
                 
     print("Please stop !")
+    #signal user to stop speaking with specific vibration
+    p1.spatial(index_ls=[0,1,2,3,4,5,6,7,8], duration = 0.25)
+    time.sleep(0.25)
+    p1.spatial(index_ls=[0,1,2,3,4,5,6,7,8], duration = 0.25)
     #recognize speech using Google Speech API (not cloud)
     try:
         text = r.recognize_google(audio)
         print(text)
         words = speech2phonemes(text) 
-        
+        print(words)
         #execute patterns for each phoneme (no pad distinction yet)
         for word in words:
             for phoneme in word:
-                for phoneme in word:
-                    if phoneme[0] == 0:
-                        p1.vibrate(pattern=phoneme)
-                    elif phoneme[0] == 1:
-                        p2.vibrate(pattern=phoneme)
-                    else:
-                        print("Error while selecting pad")
-                time.sleep(1)
+                if phoneme[0] < 2:
+                    p1.vibrate(pattern=phoneme)
+                elif phoneme[0] == 2:
+                    p2.vibrate(pattern=phoneme)
+                else:
+                    print("Error while selecting pad")
+                time.sleep(0.5)
+            time.sleep(2)
         print("Finished")
     #account for errors in SR
     except sr.UnknownValueError:
