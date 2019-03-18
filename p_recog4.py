@@ -64,7 +64,7 @@ class Motor:
         GPIO.output(self.pin,GPIO.LOW)
 
 class Pad:
-    def __init(self):
+    def __init__(self):
         self.motors = []
         
     def vibrate(self,pattern=0):
