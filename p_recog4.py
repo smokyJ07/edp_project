@@ -101,9 +101,8 @@ class Pad:
         self.motors[index_ls[len(index_ls)-1]].low()
             
 
-#transform speech to integer output (can be changed to what is needed)
-#returns a list where each element represents one word
-#each word is a list of several phonemes
+#transform speech into list of words, associate commands to phonemes in words
+#returns a list where each element represents one command
 def speech2phonemes(text):
     phonemes = g2p(text)
     print (phonemes)
